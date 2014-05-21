@@ -83,6 +83,9 @@
     <!-- Circle size for incoming call widget's each item. -->
     <dimen name="incoming_call_widget_circle_size">56dp</dimen>
 
+    <!-- Circle size for incoming call widget's each item. -->
+    <dimen name="incoming_call_widget_asset_margin">28dp</dimen>
+
     <!-- Size of alarm alert outer ring. -->
     <dimen name="glowpadview_outerring_diameter">250dp</dimen>
     <!-- Default target placement radius for GlowPadView. Should be 1/2 of outerring diameter. -->
@@ -97,7 +100,6 @@
     <!-- Default distance from each snap target that GlowPadView considers a "hit" -->
     <dimen name="glowpadview_inner_radius">15dip</dimen>
 
-    <dimen name="glowpadview_margin_bottom">-48dip</dimen>
     <dimen name="glowpadview_margin_right">0dip</dimen>
     <!-- Height of translucent shadow effect -->
     <dimen name="translucent_shadow_height">2dp</dimen>
