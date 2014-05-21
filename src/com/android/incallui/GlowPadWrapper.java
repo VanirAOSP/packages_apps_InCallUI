@@ -27,6 +27,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.android.incallui.widget.multiwaveview.GlowPadView;
+import com.android.services.telephony.common.AudioMode;
 import com.android.services.telephony.common.CallDetails;
 
 /**
@@ -150,6 +151,11 @@ public class GlowPadWrapper extends GlowPadView implements GlowPadView.OnTrigger
                 break;
             case R.drawable.ic_lockscreen_text:
                 mAnswerListener.onText();
+                mTargetTriggered = true;
+                break;
+            case R.drawable.ic_lockscreen_speaker:
+                mAnswerListener.onAnswer(toCallType(resId));
+                CallCommandClient.getInstance().setAudioMode(AudioMode.SPEAKER);
                 mTargetTriggered = true;
                 break;
             default:
