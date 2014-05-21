@@ -114,7 +114,6 @@
         android:layout_height="match_parent"
         android:gravity="start"
         android:layout_gravity="end|center_vertical"
-        android:layout_marginBottom="@dimen/glowpadview_margin_bottom"
         android:visibility="gone" />
 
     <FrameLayout
