@@ -40,7 +40,13 @@ import android.widget.Toast;
 import android.widget.PopupMenu.OnDismissListener;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+import com.android.internal.telephony.util.BlacklistUtils;
+import com.android.services.telephony.common.AudioMode;
+import com.android.services.telephony.common.Call;
+>>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 
 /**
  * Fragment for call control buttons
@@ -64,6 +70,11 @@ public class CallButtonFragment
     private ImageButton mPauseVideoButton;
     private ImageButton mOverflowButton;
     private ImageButton mAddParticipantButton;
+<<<<<<< HEAD
+=======
+    private ImageButton mModifyCallButton;
+    private CallRecordingButton mRecordButton;
+>>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 
     private PopupMenu mAudioModePopup;
     private boolean mAudioModePopupVisible;
@@ -125,6 +136,9 @@ public class CallButtonFragment
         mAddParticipantButton.setOnClickListener(this);
         mOverflowButton = (ImageButton) parent.findViewById(R.id.overflowButton);
         mOverflowButton.setOnClickListener(this);
+
+        mRecordButton = (CallRecordingButton) parent.findViewById(R.id.recordButton);
+        mRecordButton.setOnClickListener(mRecordButton);
 
         return parent;
     }
@@ -227,6 +241,7 @@ public class CallButtonFragment
         mPauseVideoButton.setEnabled(isEnabled);
         mOverflowButton.setEnabled(isEnabled);
         mAddParticipantButton.setEnabled(isEnabled);
+        mRecordButton.setEnabled(isEnabled);
     }
 
     @Override
@@ -289,8 +304,18 @@ public class CallButtonFragment
     }
 
     @Override
+<<<<<<< HEAD
     public void showSwitchCameraButton(boolean show) {
         mSwitchCameraButton.setVisibility(show ? View.VISIBLE : View.GONE);
+=======
+    public void showRecording(boolean show) {
+        mRecordButton.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void showAddCall(boolean show) {
+        mAddCallButton.setVisibility(show ? View.VISIBLE : View.GONE);
+>>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
     }
 
     @Override
@@ -304,6 +329,7 @@ public class CallButtonFragment
         mAddCallButton.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
+    @Override
     public void enableAddParticipant(boolean show) {
         mAddParticipantButton.setVisibility(show ? View.VISIBLE : View.GONE);
     }

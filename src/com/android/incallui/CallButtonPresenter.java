@@ -28,7 +28,13 @@ import com.android.incallui.InCallPresenter.CanAddCallListener;
 import com.android.incallui.InCallPresenter.InCallState;
 import com.android.incallui.InCallPresenter.InCallStateListener;
 import com.android.incallui.InCallPresenter.IncomingCallListener;
+<<<<<<< HEAD
 import com.android.incallui.InCallPresenter.InCallDetailsListener;
+=======
+import com.android.services.telephony.common.AudioMode;
+import com.android.services.telephony.common.Call;
+import com.android.services.telephony.common.Call.Capabilities;
+>>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 
 import android.content.DialogInterface;
 import android.telephony.PhoneNumberUtils;
@@ -362,9 +368,18 @@ public class CallButtonPresenter extends Presenter<CallButtonPresenter.CallButto
         Log.v(this, "Showing buttons for video call.");
         final CallButtonUi ui = getUi();
 
+<<<<<<< HEAD
         // Show all video-call-related buttons.
         ui.showSwitchCameraButton(true);
         ui.showPauseVideoButton(false);
+=======
+            updateExtraButtonRow();
+
+            boolean canRecord = CallRecorder.getInstance().isEnabled() &&
+                    CallList.getInstance().getActiveCall() != null;
+            ui.showRecording(canRecord);
+        }
+>>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
     }
 
     private void updateVoiceCallButtons(Call call) {
@@ -473,11 +488,19 @@ public class CallButtonPresenter extends Presenter<CallButtonPresenter.CallButto
         void setHold(boolean on);
         void showHoldButton(boolean show);
         void enableHold(boolean enabled);
+<<<<<<< HEAD
         void showSwapButton(boolean show);
         void showChangeToVideoButton(boolean show);
         void showSwitchCameraButton(boolean show);
         void setSwitchCameraButton(boolean isBackFacingCamera);
         void showAddCallButton(boolean show);
+=======
+        void showMerge(boolean show);
+        void showSwap(boolean show);
+        void showRecording(boolean show);
+        void showAddCall(boolean show);
+        void enableAddCall(boolean enabled);
+>>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
         void enableAddParticipant(boolean show);
         void showMergeButton(boolean show);
         void showPauseVideoButton(boolean show);
