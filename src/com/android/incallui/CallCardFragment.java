@@ -24,14 +24,11 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-<<<<<<< HEAD
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Point;
-=======
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -43,13 +40,9 @@ import android.telecom.VideoProfile;
 import android.telephony.PhoneNumberUtils;
 import android.text.format.DateUtils;
 import android.text.TextUtils;
-<<<<<<< HEAD
 import android.view.ContextThemeWrapper;
 import android.view.Display;
-=======
 import android.text.format.DateUtils;
-import android.util.AttributeSet;
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -105,7 +98,6 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
     private View mCallNumberAndLabel;
     private ImageView mPhoto;
     private TextView mElapsedTime;
-<<<<<<< HEAD
     private ImageButton mMoreMenuButton;
     private MorePopupMenu mMoreMenu;
 
@@ -120,14 +112,7 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
     private int mVBToastPosition;
     private TextView mRecordingTimeLabel;
     private TextView mRecordingIcon;
-=======
-    private View mProviderInfo;
-    private TextView mProviderLabel;
-    private TextView mProviderNumber;
-    private TextView mSubscriptionId;
-    private ViewGroup mSupplementaryInfoContainer;
     private TextView mCallRecordingTimer;
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 
     // Secondary caller info
     private View mSecondaryCallInfo;
@@ -158,10 +143,9 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
 
     private String mRecordingTime;
 
-<<<<<<< HEAD
     private static final int TTY_MODE_OFF = 0;
     private static final int TTY_MODE_HCO = 2;
-=======
+
     private CallRecorder.RecordingProgressListener mRecordingProgressListener =
             new CallRecorder.RecordingProgressListener() {
         @Override
@@ -184,13 +168,6 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
             mCallRecordingTimer.setVisibility(View.VISIBLE);
         }
     };
-
-    /**
-     * A subclass of ImageView which allows animation by LayoutTransition
-     */
-    public static class PhotoImageView extends ImageView {
-        private boolean mHasFrame = false;
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 
     private static final String VOLUME_BOOST = "volume_boost";
 
@@ -283,39 +260,10 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
         mCallNumberAndLabel = view.findViewById(R.id.labelAndNumber);
         mCallTypeLabel = (TextView) view.findViewById(R.id.callTypeLabel);
         mElapsedTime = (TextView) view.findViewById(R.id.elapsedTime);
-<<<<<<< HEAD
-        mPrimaryCallCardContainer = view.findViewById(R.id.primary_call_info_container);
-        mPrimaryCallInfo = (ViewGroup) view.findViewById(R.id.primary_call_banner);
-        mCallButtonsContainer = view.findViewById(R.id.callButtonFragment);
-        mInCallMessageLabel = (TextView) view.findViewById(R.id.connectionServiceMessage);
-        mProgressSpinner = view.findViewById(R.id.progressSpinner);
-
-        mMoreMenuButton = (ImageButton) view.findViewById(R.id.moreMenuButton);
-        final ContextThemeWrapper contextWrapper = new ContextThemeWrapper(getActivity(),
-                R.style.InCallPopupMenuStyle);
-        mMoreMenu = new MorePopupMenu(contextWrapper, mMoreMenuButton /* anchorView */);
-        mMoreMenu.getMenuInflater().inflate(R.menu.incall_more_menu, mMoreMenu.getMenu());
-        mMoreMenuButton.setOnTouchListener(mMoreMenu.getDragToOpenListener());
-        mMoreMenuButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mMoreMenu.show();
-            }
-        });
-=======
-        mProviderInfo = view.findViewById(R.id.providerInfo);
-        mProviderLabel = (TextView) view.findViewById(R.id.providerLabel);
-        mProviderNumber = (TextView) view.findViewById(R.id.providerAddress);
-        mSubscriptionId = (TextView) view.findViewById(R.id.subId);
-        mSupplementaryInfoContainer =
-            (ViewGroup) view.findViewById(R.id.supplementary_info_container);
-        mVideoCallPanel = (VideoCallPanel) view.findViewById(R.id.videoCallPanel);
         mCallRecordingTimer = (TextView) view.findViewById(R.id.callRecordingTimer);
 
         CallRecorder recorder = CallRecorder.getInstance();
         recorder.addRecordingProgressListener(mRecordingProgressListener);
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
-
 
         mFloatingActionButtonContainer = view.findViewById(
                 R.id.floating_end_call_action_button_container);
@@ -362,14 +310,8 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
         if (null != mVBButton) {
             mVBButton.setOnClickListener(mVBListener);
         }
-<<<<<<< HEAD
         mRecordingTimeLabel = (TextView) view.findViewById(R.id.recordingTime);
         mRecordingIcon = (TextView) view.findViewById(R.id.recordingIcon);
-=======
-
-        CallRecorder recorder = CallRecorder.getInstance();
-        recorder.removeRecordingProgressListener(mRecordingProgressListener);
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
     }
 
     @Override

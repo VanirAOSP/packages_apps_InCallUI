@@ -21,8 +21,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.android.services.telephony.common.Call;
-
 public class CallRecordingButton extends ImageButton
         implements CallRecorder.RecordingProgressListener, View.OnClickListener {
 
@@ -48,7 +46,7 @@ public class CallRecordingButton extends ImageButton
             Call call = CallList.getInstance().getActiveCall();
             // can't start recording with no active call
             if (call != null) {
-                recorder.startRecording(call.getNumber(), call.getCreateTime());
+                recorder.startRecording(call.getNumber(), call.getConnectTimeMillis());
             }
         }
         updateDrawable();

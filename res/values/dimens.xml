@@ -102,7 +102,6 @@
     <!-- Height of translucent shadow effect -->
     <dimen name="translucent_shadow_height">2dp</dimen>
 
-<<<<<<< HEAD
     <dimen name="end_call_button_margin_bottom">8dp</dimen>
 
     <dimen name="call_card_anim_translate_y_offset">50dp</dimen>
@@ -121,11 +120,7 @@
 
     <dimen name="conference_call_manager_padding_top">64dp</dimen>
     <dimen name="conference_call_manager_button_dimension">46dp</dimen>
-=======
-    <!-- Dimensions for Video Call Panel -->
-    <dimen name="indicator_bar_width">38dp</dimen>
 
     <!-- Size of call recorder progress timer text -->
     <dimen name="recording_progress_text_size">64dp</dimen>
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 </resources>

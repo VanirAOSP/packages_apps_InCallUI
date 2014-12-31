@@ -62,7 +62,6 @@
 
     <color name="translucent_shadow">#33999999</color>
 
-<<<<<<< HEAD
     <!-- 70% opacity, black. -->
     <color name="glowpad_background_color">#b3000000</color>
     <!-- 15% opacity, white. -->
@@ -77,9 +76,8 @@
 
     <!-- 20% opacity, theme color. -->
     <color name="incall_dialpad_touch_tint">#330288d1</color>
-=======
+
     <!-- Color of recording progrss timer -->
     <color name="recording_progress_text_color">#f22121</color>
     <color name="recording_progress_background">#40000000</color>
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 </resources>

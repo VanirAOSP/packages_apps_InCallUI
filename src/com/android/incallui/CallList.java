@@ -22,24 +22,17 @@ import com.google.common.base.Preconditions;
 
 import android.os.Handler;
 import android.os.Message;
-<<<<<<< HEAD
 import android.telecom.DisconnectCause;
 import android.telecom.Phone;
 import android.telecom.PhoneAccountHandle;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
-=======
 import android.text.TextUtils;
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 
 import com.android.internal.telephony.PhoneConstants;
 
 import java.util.ArrayList;
-<<<<<<< HEAD
 import java.util.Collections;
-=======
-import java.util.Collection;
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -798,7 +791,7 @@ public class CallList implements InCallPhoneListener {
     }
 
     public Call getCallWithStateAndNumber(int state, String number) {
-        for (Call call : mCallMap.values()) {
+        for (Call call : mCallById.values()) {
             if (TextUtils.equals(call.getNumber(), number) && call.getState() == state) {
                 return call;
             }

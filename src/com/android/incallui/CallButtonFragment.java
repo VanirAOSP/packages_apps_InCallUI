@@ -40,13 +40,7 @@ import android.widget.Toast;
 import android.widget.PopupMenu.OnDismissListener;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
-=======
-import com.android.internal.telephony.util.BlacklistUtils;
-import com.android.services.telephony.common.AudioMode;
-import com.android.services.telephony.common.Call;
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 
 /**
  * Fragment for call control buttons
@@ -70,11 +64,7 @@ public class CallButtonFragment
     private ImageButton mPauseVideoButton;
     private ImageButton mOverflowButton;
     private ImageButton mAddParticipantButton;
-<<<<<<< HEAD
-=======
-    private ImageButton mModifyCallButton;
     private CallRecordingButton mRecordButton;
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
 
     private PopupMenu mAudioModePopup;
     private boolean mAudioModePopupVisible;
@@ -304,18 +294,12 @@ public class CallButtonFragment
     }
 
     @Override
-<<<<<<< HEAD
     public void showSwitchCameraButton(boolean show) {
         mSwitchCameraButton.setVisibility(show ? View.VISIBLE : View.GONE);
-=======
+    }
+    
     public void showRecording(boolean show) {
         mRecordButton.setVisibility(show ? View.VISIBLE : View.GONE);
-    }
-
-    @Override
-    public void showAddCall(boolean show) {
-        mAddCallButton.setVisibility(show ? View.VISIBLE : View.GONE);
->>>>>>> 7a156e0... Add an option in the InCall UI to perform call recording
     }
 
     @Override

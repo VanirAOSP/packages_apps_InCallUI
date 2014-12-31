@@ -33,7 +33,6 @@ import com.android.services.callrecorder.CallRecorderService;
 import com.android.services.callrecorder.CallRecordingDataStore;
 import com.android.services.callrecorder.common.CallRecording;
 import com.android.services.callrecorder.common.ICallRecorderService;
-import com.android.services.telephony.common.Call;
 
 import java.util.Date;
 import java.util.HashSet;
