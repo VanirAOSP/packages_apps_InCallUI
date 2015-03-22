@@ -33,9 +33,10 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.Surface;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.common.base.Preconditions;
-
 import com.android.incalluibind.ObjectFactory;
 
 import java.util.Collections;
@@ -524,11 +525,11 @@ public class InCallPresenter implements CallList.Listener, InCallPhoneListener {
         return mProximitySensor;
     }
 
-    public void handleAccountSelection(PhoneAccountHandle accountHandle) {
+    public void handleAccountSelection(PhoneAccountHandle accountHandle, boolean setDefault) {
         Call call = mCallList.getWaitingForAccountCall();
         if (call != null) {
             String callId = call.getId();
-            TelecomAdapter.getInstance().phoneAccountSelected(callId, accountHandle);
+            TelecomAdapter.getInstance().phoneAccountSelected(callId, accountHandle, setDefault);
         }
     }
 
@@ -1093,6 +1094,10 @@ public class InCallPresenter implements CallList.Listener, InCallPhoneListener {
 
             mListeners.clear();
             mIncomingCallListeners.clear();
+            mDetailsListeners.clear();
+            mCanAddCallListeners.clear();
+            mOrientationListeners.clear();
+            mInCallEventListeners.clear();
 
             Log.d(this, "Finished InCallPresenter.CleanUp");
         }
@@ -1217,6 +1222,21 @@ public class InCallPresenter implements CallList.Listener, InCallPhoneListener {
             mInCallActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         } else {
             mInCallActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        }
+    }
+
+    public void enableScreenTimeout(boolean v) {
+        Log.v(this, "enableScreenTimeout: value=" + v);
+        if (mInCallActivity == null) {
+            Log.e(this, "enableScreenTimeout: InCallActivity is null.");
+            return;
+        }
+
+        final Window window = mInCallActivity.getWindow();
+        if (v) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
 

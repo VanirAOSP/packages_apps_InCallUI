@@ -37,6 +37,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.telecom.DisconnectCause;
+import android.telecom.TelecomManager;
 import android.telecom.VideoProfile;
 import android.telephony.PhoneNumberUtils;
 import android.text.format.DateUtils;
@@ -146,8 +147,7 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
 
     private int mVideoAnimationDuration;
 
-    private static final int TTY_MODE_OFF = 0;
-    private static final int TTY_MODE_HCO = 2;
+    private static final int DEFAULT_VIEW_OFFSET_Y = 0;
 
     private CallRecorder.RecordingProgressListener mRecordingProgressListener =
             new CallRecorder.RecordingProgressListener() {
@@ -653,10 +653,7 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
                 }
             }
         } else {
-            Animation callStateAnimation = mCallStateLabel.getAnimation();
-            if (callStateAnimation != null) {
-                callStateAnimation.cancel();
-            }
+            mCallStateLabel.clearAnimation();
             mCallStateLabel.setText(null);
             mCallStateLabel.setAlpha(0);
             mCallStateLabel.setVisibility(View.GONE);
@@ -1051,8 +1048,26 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
                         observer.removeOnGlobalLayoutListener(this);
 
                         onDialpadVisiblityChange(mIsDialpadShowing);
+                        updateVideoCallViews();
                     }
                 });
+    }
+
+    private void updateVideoCallViews() {
+        Log.d(this, "updateVideoCallViews");
+        View previewVideoView = getView().findViewById(R.id.previewVideo);
+        View zoomControlView = getView().findViewById(R.id.zoom_control);
+
+        final float secondaryCallInfoHeight = mSecondaryCallInfo.getHeight();
+        final boolean isSecondaryCallInfoShown = mSecondaryCallInfo.isShown();
+        if (previewVideoView != null) {
+            previewVideoView.setTranslationY(isSecondaryCallInfoShown ?
+                -secondaryCallInfoHeight : DEFAULT_VIEW_OFFSET_Y);
+        }
+        if (zoomControlView != null) {
+            zoomControlView.setTranslationY(isSecondaryCallInfoShown ?
+                -secondaryCallInfoHeight : DEFAULT_VIEW_OFFSET_Y);
+        }
     }
 
     /**
@@ -1163,13 +1178,13 @@ public class CallCardFragment extends BaseFragment<CallCardPresenter, CallCardPr
 
         if (activity != null) {
             settingsTtyMode = Settings.Secure.getInt(activity.getContentResolver(),
-                    Settings.Secure.PREFERRED_TTY_MODE, TTY_MODE_OFF);
+                    Settings.Secure.PREFERRED_TTY_MODE, TelecomManager.TTY_MODE_OFF);
         } else {
-            settingsTtyMode = TTY_MODE_OFF;
+            settingsTtyMode = TelecomManager.TTY_MODE_OFF;
         }
 
         return (mode == AudioState.ROUTE_EARPIECE || mode == AudioState.ROUTE_SPEAKER
-                || settingsTtyMode == TTY_MODE_HCO);
+                || settingsTtyMode == TelecomManager.TTY_MODE_HCO);
     }
 
     private void switchVBStatus() {

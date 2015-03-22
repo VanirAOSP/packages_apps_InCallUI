@@ -217,7 +217,7 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
             maybeStartSearch(mPrimary, true);
             mPrimary.setSessionModificationState(Call.SessionModificationState.NO_REQUEST);
         } else if (primaryForwardedChanged && mPrimary != null) {
-            updatePrimaryDisplayInfo();
+            updatePrimaryDisplayInfo(mPrimaryContactInfo, isConference(mPrimary));
         }
 
         if (mSecondary == null) {
@@ -270,11 +270,24 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
 
         maybeShowManageConferenceCallButton();
 
+        //Note that both primary and secondary calls can be modified
+        final boolean isModifyRequest = isPendingModifyRequest(mPrimary) ||
+                isPendingModifyRequest(mSecondary);
+
         final boolean enableEndCallButton = Call.State.isConnectingOrConnected(callState) &&
-                callState != Call.State.INCOMING && mPrimary != null;
-        // Hide the end call button instantly if we're receiving an incoming call.
+                callState != Call.State.INCOMING && mPrimary != null && !isModifyRequest;
+        /* Hide the end call button instantly if we're receiving an incoming call
+           or when receiving a modify request */
         getUi().setEndCallButtonEnabled(
-                enableEndCallButton, callState != Call.State.INCOMING /* animate */);
+                enableEndCallButton, callState != Call.State.INCOMING &&
+                !isModifyRequest /* animate */);
+    }
+
+    //Return TRUE if there is a modify request pending user action
+    boolean isPendingModifyRequest(Call call) {
+        return (call != null && call.getSessionModificationState() ==
+                Call.SessionModificationState.RECEIVED_UPGRADE_TO_VIDEO_REQUEST);
+
     }
 
     @Override
@@ -336,7 +349,7 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
             return false;
         }
 
-        return mPrimary.can(PhoneCapabilities.MANAGE_CONFERENCE);
+        return mPrimary.can(PhoneCapabilities.MANAGE_CONFERENCE) && !mPrimary.isVideoCall(mContext);
     }
 
     private void setCallbackNumber() {
@@ -408,6 +421,13 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
     }
 
     private void onContactInfoComplete(String callId, ContactCacheEntry entry, boolean isPrimary) {
+        Call call = (isPrimary ? mPrimary: mSecondary);
+        Log.d(TAG, "onContactInfoComplete: callId = " + callId + " isPrimary = " + isPrimary
+                + " call = " + call);
+        if (call == null || callId == null || !callId.equals(call.getId())) {
+            Log.d(TAG, "onContactInfoComplete: contact info is not for the current call.");
+            return;
+        }
         updateContactEntry(entry, isPrimary);
         if (entry.name != null) {
             Log.d(TAG, "Contact found: " + entry);
@@ -500,7 +520,6 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
             return;
         }
 
-        final boolean isForwarded = isForwarded(mPrimary);
         if (mPrimary.isConferenceCall()) {
             Log.d(TAG, "Update primary display info for conference call.");
 
@@ -519,9 +538,12 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
             String name = getNameForCall(mPrimaryContactInfo);
             String number = getNumberForCall(mPrimaryContactInfo);
             boolean nameIsNumber = name != null && name.equals(mPrimaryContactInfo.number);
+            boolean isIncoming = mPrimary.getState() == Call.State.INCOMING;
+            final boolean isForwarded = isForwarded(mPrimary);
+            final String checkIdpName = checkIdp(name, nameIsNumber, isIncoming);
             ui.setPrimary(
                     number,
-                    name,
+                    checkIdpName,
                     nameIsNumber,
                     isForwarded,
                     mPrimaryContactInfo.label,
@@ -639,7 +661,7 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
         // accounts pick icon from phone account and display on UI
         if (account != null && (getTelecomManager().hasMultipleCallCapableAccounts()
                 || (CallList.PHONE_COUNT > 1))) {
-            return account.getIcon(mContext);
+            return account.createIconDrawable(mContext);
         }
         return null;
     }
@@ -769,30 +791,6 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
         ui.setCallCardVisible(!isFullScreenVideo);
     }
 
-    public void blacklistClicked(final Context context) {
-        if (mPrimary == null) {
-            return;
-        }
-
-        final String number = mPrimary.getNumber();
-        final String message = context.getString(R.string.blacklist_dialog_message, number);
-
-        new AlertDialog.Builder(context)
-                .setTitle(R.string.blacklist_dialog_title)
-                .setMessage(message)
-                .setPositiveButton(R.string.pause_prompt_yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(this, "hanging up due to blacklist: " + mPrimary.getId());
-                        TelecomAdapter.getInstance().disconnectCall(mPrimary.getId());
-                        BlacklistUtils.addOrUpdate(context, mPrimary.getNumber(),
-                                BlacklistUtils.BLOCK_CALLS, BlacklistUtils.BLOCK_CALLS);
-                    }
-                })
-                .setNegativeButton(R.string.pause_prompt_no, null)
-                .show();
-    }
-
     private TelecomManager getTelecomManager() {
         if (mTelecomManager == null) {
             mTelecomManager =
@@ -819,6 +817,30 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
         Drawable photo = mContext.getResources().getDrawable(resId);
         photo.setAutoMirrored(true);
         return photo;
+    }
+
+    public void blacklistClicked(final Context context) {
+        if (mPrimary == null) {
+            return;
+        }
+
+        final String number = mPrimary.getNumber();
+        final String message = context.getString(R.string.blacklist_dialog_message, number);
+
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.blacklist_dialog_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.pause_prompt_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(this, "hanging up due to blacklist: " + mPrimary.getId());
+                        TelecomAdapter.getInstance().disconnectCall(mPrimary.getId());
+                        BlacklistUtils.addOrUpdate(context, mPrimary.getNumber(),
+                                BlacklistUtils.BLOCK_CALLS, BlacklistUtils.BLOCK_CALLS);
+                    }
+                })
+                .setNegativeButton(R.string.pause_prompt_no, null)
+                .show();
     }
 
     public interface CallCardUi extends Ui {

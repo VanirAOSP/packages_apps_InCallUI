@@ -25,6 +25,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnCancelListener;
@@ -208,6 +210,8 @@ public class InCallActivity extends Activity {
 
     @Override
     protected void onSaveInstanceState(Bundle out) {
+        Log.d(this, "onSaveInstanceState: savedInstanceState = " + out);
+        super.onSaveInstanceState(out);
         out.putBoolean(SHOW_DIALPAD_EXTRA, mCallButtonFragment.isDialpadVisible());
         if (mDialpadFragment != null) {
             out.putString(DIALPAD_TEXT_EXTRA, mDialpadFragment.getDtmfText());
@@ -817,7 +821,7 @@ public class InCallActivity extends Activity {
             default:
                 // Attempt to use a service we don't recognize or support
                 // ("Unsupported service" or "Selected service failed")
-               errorMessageResId = R.string.incall_error_supp_service_unknown;
+                errorMessageResId = R.string.incall_error_supp_service_unknown;
                 break;
         }
         final CharSequence msg = getResources().getText(errorMessageResId);
@@ -882,7 +886,7 @@ public class InCallActivity extends Activity {
         ActionBar bar = getActionBar();
 
         for (int i = 0; i < phoneCount; i++) {
-            long[] subId = CallList.getInstance().getSubId(i);
+            int[] subId = CallList.getInstance().getSubId(i);
             if (subId != null && CallList.getInstance().hasAnyLiveCall(subId[0])) {
                 if (!mDsdaTabAdd[i]) {
                     addDsdaTab(i);
@@ -950,7 +954,7 @@ public class InCallActivity extends Activity {
             //setting active subscription automatically when call on one sub
             //ends and it's corresponding tab is removed.For such cases active
             //subscription will be set by InCallPresenter.attemptFinishActivity.
-            long[] subId = CallList.getInstance().getSubId(mPhoneId);
+            int[] subId = CallList.getInstance().getSubId(mPhoneId);
             if (tabCount != TAB_COUNT_ONE && CallList.getInstance().hasAnyLiveCall(subId[0])
                     && (CallList.getInstance().getActiveSubscription() != subId[0])) {
                 Log.i(this, "Switch to other active sub: " + subId[0]);
